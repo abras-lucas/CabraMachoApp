@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -6,51 +6,14 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, Button } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import animais from './animais';
+import api from '../services/api';
+import Scanner from '../components/Scanner';
+import Currais from '../components/Currais';
 
-function Currais() {
+export default function principal({ navigation, route }) {
 
-  const navigation = useNavigation();
+  const Tab = createBottomTabNavigator();
 
-  return (
-    <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-      <Text h4>
-        Curral 1
-        <Button
-        icon={
-          <Icon
-            name="plus"
-            size={15}
-            color="white"
-          />
-        }
-        //title=" Salvar"
-        //buttonStyle={styles.button}
-        onPress={() => navigation.navigate("Animais")}
-      />
-      </Text>
-    </View>
-  );
-}
-
-function Perfil() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text h4>Perfil!</Text>
-    </View>
-  );
-}
-
-function Scaner() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text h4>Scaneador ficará aqui!</Text>
-    </View>
-  );
-}
-
-const Tab = createBottomTabNavigator();
-
-export default function principal(navigation) {
   return (
     <Tab.Navigator
       initialRouteName="Currais"
@@ -60,7 +23,8 @@ export default function principal(navigation) {
     >
       <Tab.Screen
         name="Currais"
-        component={Currais}
+        // component={Currais}
+        children={() => <Currais navigation={navigation} route={route} />}
         options={{
           tabBarLabel: 'Início',
           tabBarIcon: ({ color, size }) => (
@@ -69,10 +33,11 @@ export default function principal(navigation) {
         }}
       />
       <Tab.Screen
-        name="Scaner"
-        component={Scaner}
+        name="Scanner"
+        // component={Scanner}
+        children={() => <Scanner navigation={navigation} route={route} />}
         options={{
-          tabBarLabel: 'Scaner',
+          tabBarLabel: 'Scanner',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="overscan" color={color} size={size} />
           ),
@@ -89,5 +54,13 @@ export default function principal(navigation) {
         }}
       />
     </Tab.Navigator>
+  );
+}
+
+function Perfil() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text h4>Perfil!</Text>
+    </View>
   );
 }

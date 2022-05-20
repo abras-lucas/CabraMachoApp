@@ -8,17 +8,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import login from './screens/login';
 import principal from './screens/principal';
 import cadastro from './screens/cadastro';
-import animais from './screens/animais';
+import Animais from './screens/animais';
 
 const Stack = createStackNavigator();
 
 function MyStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={login} />
+      {<Stack.Screen name="Login" component={login} />}
       <Stack.Screen name="Principal" component={principal} />
       <Stack.Screen name="Cadastro" component={cadastro} />
-      <Stack.Screen name="Animais" component={animais} />
+      <Stack.Screen name="Animais" component={Animais} />
     </Stack.Navigator>
   );
 }
