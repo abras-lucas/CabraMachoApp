@@ -6,6 +6,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, Button, Input } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '../../services/api';
+import { AppRegistry, SafeAreaView } from 'react-native-web';
+import Curral from '../Curral';
+import BotaoFlutuante from '../BotaoFlutuante'
 
 export default function Currais({ navigation, route }) {
     const [currais, setCurrais] = useState([])
@@ -13,27 +16,7 @@ export default function Currais({ navigation, route }) {
 
     useEffect(() => {
         loadCurrais()
-    })
-
-    const renderItem = ({ item }) => {
-        return <View style={styles.item}>
-            <MaterialCommunityIcons name="cow" style={styles.icon} />
-            <View style={styles.itemInfo}>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.name}>{item.id}</Text>
-                <Button
-                    icon={
-                        <Icon
-                            name="times"
-                            size={15}
-                            color="white"
-                        />
-                    }
-                onPress = {() => removeCurral(item)}
-                />
-            </View>
-        </View>
-    }
+    }, [])
 
     const loadCurrais = () => {
         api.get('/corrals', {
@@ -48,27 +31,83 @@ export default function Currais({ navigation, route }) {
     }
 
     const addCurral = () => {
+        /* if (!name) {
+            alert('Preencha o campo nome!')
+            return
+        }*/
+
         api.post('/corrals', { name }, {
             headers: {
                 Authorization: route.params.token
             }
         }).then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
+            if (res.data) {
+                const curral = {
+                    id: res.data.id,
+                    name
+                }
+
+                const currais_ = [...currais, curral]
+                setCurrais(currais_)
+            }
         }).catch((err) => {
             console.log(err)
         })
     }
 
     const removeCurral = (curral) => {
-        console.log('Deletei o item ' + curral.id)
-        console.log(`Deletei o item ${curral.id}`)
+        console.log(`Deletei o curral ${curral.id}`)
+        api.delete(`/corrals/${curral.id}`, {
+            headers: {
+                Authorization: route.params.token
+            }
+        }).then((res) => {
+            console.log(res.data)
+            const currais_ = currais.filter((curral_) => curral_.id !== curral.id)
+            setCurrais(currais_)
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
-    return <View>
+    const updateCurral = (curral, newName) => {
+        /* if (!newName) {
+            alert('Preencha o campo nome!')
+            return
+        }*/
+
+        console.log(`Alterei o curral ${curral.id}`)
+        api.put(`/corrals/${curral.id}`, { name: newName }, {
+            headers: {
+                Authorization: route.params.token
+            }
+        })
+            .then((res) => res.data)
+            .then((res) => {
+                if (res.success) {
+                    const currais_ = [...currais]
+                    currais_.forEach((curral_) => {
+                        if (curral_.id === curral.id) {
+                            curral_.name = newName
+                        }
+                    })
+                    setCurrais(currais_)
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+    }
+
+    const loadAnimals = (curral) => {
+        navigation.navigate("Animais", { token: route.params.token, curral_id: curral.id })
+    }
+
+    return <SafeAreaView style={styles.container}>
         <Input
             value={name}
-            placeholder="E-mail"
-            leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+            placeholder="Nome do curral:"
+            leftIcon={{ type: 'font-awesome', name: 'list' }}
             onChangeText={value => setName(value)}
             keyboardType="email-address"
         />
@@ -84,26 +123,36 @@ export default function Currais({ navigation, route }) {
         />
         <FlatList
             data={currais}
-            renderItem={renderItem}
+            renderItem={({ item }) => <Curral
+                curral={item}
+                updateCurral={updateCurral}
+                removeCurral={removeCurral}
+                loadAnimals={loadAnimals}
+            />}
             keyExtractor={(item) => item.id}
         />
-    </View>
+        <BotaoFlutuante/>
+    </SafeAreaView>
 
 }
 
 const styles = StyleSheet.create({
+    container:{
+        flex: 1,
+        position: 'relative'
+    },
     item: {
         padding: '1em',
         flexDirection: 'row',
         alignItems: 'center',
-        borderBottomWidth: '1px'
+        borderBottomWidth: 1
     },
     icon: {
-        fontSize: '25px',
+        fontSize: 25,
         marginEnd: '0.5em'
     },
     name: {
-        fontSize: '20px'
+        fontSize: 20
     },
     itemInfo: {
         flexDirection: 'row',

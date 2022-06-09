@@ -5,11 +5,11 @@ import { Text, Button, Input } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-web';
 
-export default function Animal({ animal, editAnimal, removeAnimal }) {
-    // const [edit, setEdit] = useState(false)
-    // const [name, setName] = useState(curral.name)
+export default function Curral({ curral, updateCurral, removeCurral, loadAnimals }) {
+    const [edit, setEdit] = useState(false)
+    const [name, setName] = useState(curral.name)
 
-    /* if (edit) {
+    if (edit) {
         return <View style={styles.edit}>
             <Input style={styles.input}
                 value={name}
@@ -27,7 +27,7 @@ export default function Animal({ animal, editAnimal, removeAnimal }) {
                     }
                     onPress={
                         () => {
-                            updateAnimal(curral, name)
+                            updateCurral(curral, name)
                             setEdit(false)
                         }
                     }
@@ -45,39 +45,39 @@ export default function Animal({ animal, editAnimal, removeAnimal }) {
             </View>
         </View>
 
-    } */
+    }
 
-    return <View style={styles.item}>
-        <MaterialCommunityIcons name="cow" style={styles.icon} />
-        <View style={styles.itemInfo}>
-            <Text style={styles.name}>{animal.code}</Text>
-            <Text style={styles.name}>{animal.breed}</Text>
-            <Text style={styles.name}>{animal.food}</Text>
-            <Text style={styles.name}>{animal.birth}</Text>
-            <View style={styles.menuHorizontal}>
-                <Button style={{ marginRight: 10 }}
-                    icon={
-                        <Icon
-                            name="edit"
-                            size={15}
-                            color="white"
-                        />
-                    }
-                    onPress={() => editAnimal(animal)}
-                />
-                <Button
-                    icon={
-                        <Icon
-                            name="times"
-                            size={15}
-                            color="white"
-                        />
-                    }
-                    onPress={() => removeAnimal(animal)}
-                />
+    return <TouchableOpacity onPress = {() => loadAnimals(curral)}>
+        <View style={styles.item}>
+            <MaterialCommunityIcons name="cow" style={styles.icon} />
+            <View style={styles.itemInfo}>
+                <Text style={styles.name}>{curral.name}</Text>
+                <Text style={styles.name}>{curral.id}</Text>
+                <View style={styles.menuHorizontal}>
+                    <Button style={{ marginRight: 10 }}
+                        icon={
+                            <Icon
+                                name="edit"
+                                size={15}
+                                color="white"
+                            />
+                        }
+                        onPress={() => setEdit(true)}
+                    />
+                    <Button
+                        icon={
+                            <Icon
+                                name="times"
+                                size={15}
+                                color="white"
+                            />
+                        }
+                        onPress={() => removeCurral(curral)}
+                    />
+                </View>
             </View>
         </View>
-    </View>
+    </TouchableOpacity>
 }
 
 const styles = StyleSheet.create({
