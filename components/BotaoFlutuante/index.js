@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -7,16 +7,32 @@ import { Text, Button, Input } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '../../services/api';
 import { AppRegistry, SafeAreaView, TouchableOpacity } from 'react-native-web';
-import Curral from '../Curral';
+import { Modalize } from 'react-native-modalize';
 
 export default function BotaoFlutuante({ func }) {
-    return <TouchableOpacity style={styles.container}>
-        <Icon
-            name="plus"
-            size={15}
-            color="white"
-        />
-    </TouchableOpacity>
+
+    const modalizeRef = useRef(null)
+
+    function onOpen() {
+        modalizeRef.current?.open()
+    }
+
+    return <View>
+        <TouchableOpacity onPress={onOpen} style={styles.container}>
+            <Icon
+                name="plus"
+                size={15}
+                color="white"
+            />
+            <Modalize ref={modalizeRef} snapPoint={560}>
+                <View style={styles.item}>
+                    <Text>
+                        TESTE
+                    </Text>
+                </View>
+            </Modalize>
+        </TouchableOpacity>
+    </View>
 }
 
 const styles = StyleSheet.create({
@@ -31,5 +47,11 @@ const styles = StyleSheet.create({
         borderRadius: 0.5,
         width: '50px',
         height: '50px'
+    },
+    item: {
+        padding: '1em',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1
     }
 })

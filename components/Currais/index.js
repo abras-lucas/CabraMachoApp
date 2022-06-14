@@ -131,13 +131,15 @@ export default function Currais({ navigation, route }) {
             />}
             keyExtractor={(item) => item.id}
         />
+
         <BotaoFlutuante/>
+
     </SafeAreaView>
 
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
         position: 'relative'
     },
