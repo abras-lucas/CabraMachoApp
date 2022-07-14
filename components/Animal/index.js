@@ -47,40 +47,66 @@ export default function Animal({ animal, editAnimal, removeAnimal }) {
 
     } */
 
-    return <View style={styles.item}>
-        <MaterialCommunityIcons name="cow" style={styles.icon} />
-        <View style={styles.itemInfo}>
-            <Text style={styles.name}>{animal.code}</Text>
-            <Text style={styles.name}>{animal.breed}</Text>
-            <Text style={styles.name}>{animal.food}</Text>
-            <Text style={styles.name}>{animal.birth}</Text>
-            <View style={styles.menuHorizontal}>
-                <Button style={{ marginRight: 10 }}
-                    icon={
-                        <Icon
-                            name="edit"
-                            size={15}
-                            color="white"
-                        />
-                    }
-                    onPress={() => editAnimal(animal)}
-                />
-                <Button
-                    icon={
-                        <Icon
-                            name="times"
-                            size={15}
-                            color="white"
-                        />
-                    }
-                    onPress={() => removeAnimal(animal)}
-                />
+    return <View style={styles.container}>
+        <View style={[styles.body, styles.shadow]}>
+            <MaterialCommunityIcons name="donkey" style={styles.icon} />
+            <View style={styles.itemInfo}>
+                <Text style={styles.name}>{animal.code}</Text>
+                <Text style={styles.name}>{animal.breed}</Text>
+                <Text style={styles.name}>{animal.food}</Text>
+                <Text style={styles.name}>{animal.birth}</Text>
+                <View style={styles.menuHorizontal}>
+                    <Button style={{ marginRight: 10 }}
+                        icon={
+                            <Icon
+                                name="edit"
+                                size={15}
+                                color="white"
+                            />
+                        }
+                        onPress={() => editAnimal(animal)}
+                    />
+                    <Button
+                        icon={
+                            <Icon
+                                name="times"
+                                size={15}
+                                color="white"
+                            />
+                        }
+                        onPress={() => removeAnimal(animal)}
+                    />
+                </View>
             </View>
         </View>
     </View>
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        paddingTop: 6,
+        paddingBottom: 8
+    },
+    body: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 16,
+        backgroundColor: 'white',
+        borderRadius: 8
+    },
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
     item: {
         flex: 1,
         padding: '1em',

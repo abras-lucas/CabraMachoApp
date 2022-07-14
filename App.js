@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, Input, Text } from 'react-native-elements';
+import React, { useState, useContext } from 'react';
+import { StyleSheet, View, Button } from 'react-native';
+import { Input, Text } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './style/mainStyle';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -9,16 +9,31 @@ import login from './screens/login';
 import principal from './screens/principal';
 import cadastro from './screens/cadastro';
 import Animais from './screens/animais';
+import AuthProvider from './contexts/auth';
+import { AuthContext } from './contexts/auth'
 
 const Stack = createStackNavigator();
 
 function MyStack() {
+
+  const { onOpenModalAnimais } = useContext(AuthContext)
+
   return (
     <Stack.Navigator>
-      {<Stack.Screen name="Login" component={login} />}
-      <Stack.Screen name="Principal" component={principal} />
+      <Stack.Screen name="Login" component={login} />
+      <Stack.Screen name="Principal" component={principal} /*options={{headerShown:false}}*/ />
       <Stack.Screen name="Cadastro" component={cadastro} />
-      <Stack.Screen name="Animais" component={Animais} />
+      <Stack.Screen name="Animais" component={Animais} options={{
+        headerRight: () => (
+          <View style={{ marginRight: 10 }} >
+            <Button
+              onPress={onOpenModalAnimais}
+              title="Adicionar"
+              color="#000"
+            />
+          </View>
+        ),
+      }} />
     </Stack.Navigator>
   );
 }
@@ -26,7 +41,9 @@ function MyStack() {
 export default function App() {
   return (
     <NavigationContainer>
-      <MyStack />
+      <AuthProvider>
+        <MyStack />
+      </AuthProvider>
     </NavigationContainer>
   );
 }

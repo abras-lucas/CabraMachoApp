@@ -1,70 +1,38 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, Button, Input } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { TouchableOpacity } from 'react-native-web';
 
 export default function Curral({ curral, updateCurral, removeCurral, loadAnimals }) {
     const [edit, setEdit] = useState(false)
     const [name, setName] = useState(curral.name)
 
     if (edit) {
-        return <View style={styles.edit}>
-            <Input style={styles.input}
-                value={name}
-                placeholder="Nome do Curral:"
-                onChangeText={value => setName(value)}
-            />
-            <View style={styles.menu}>
-                <Button style={styles.btn}
-                    icon={
-                        <Icon
-                            name="save"
-                            size={15}
-                            color="white"
-                        />
-                    }
-                    onPress={
-                        () => {
-                            updateCurral(curral, name)
-                            setEdit(false)
-                        }
-                    }
+        return <View style={styles.container}>
+            <View style={[styles.body, styles.shadow, styles.edit]}>
+                <TextInput style={styles.input}
+                    value={name}
+                    placeholder="Nome do Curral:"
+                    onChangeText={value => setName(value)}
                 />
-                <Button style={styles.btn}
-                    icon={
-                        <Icon
-                            name="times"
-                            size={15}
-                            color="white"
-                        />
-                    }
-                    onPress={() => setEdit(false)}
-                />
-            </View>
-        </View>
-
-    }
-
-    return <TouchableOpacity onPress = {() => loadAnimals(curral)}>
-        <View style={styles.item}>
-            <MaterialCommunityIcons name="cow" style={styles.icon} />
-            <View style={styles.itemInfo}>
-                <Text style={styles.name}>{curral.name}</Text>
-                <Text style={styles.name}>{curral.id}</Text>
-                <View style={styles.menuHorizontal}>
-                    <Button style={{ marginRight: 10 }}
+                <View style={styles.menu}>
+                    <Button style={[styles.btn, {marginRight: 10}]}
                         icon={
                             <Icon
-                                name="edit"
+                                name="save"
                                 size={15}
                                 color="white"
                             />
                         }
-                        onPress={() => setEdit(true)}
+                        onPress={
+                            () => {
+                                updateCurral(curral, name)
+                                setEdit(false)
+                            }
+                        }
                     />
-                    <Button
+                    <Button style={styles.btn}
                         icon={
                             <Icon
                                 name="times"
@@ -72,8 +40,43 @@ export default function Curral({ curral, updateCurral, removeCurral, loadAnimals
                                 color="white"
                             />
                         }
-                        onPress={() => removeCurral(curral)}
+                        onPress={() => setEdit(false)}
                     />
+                </View>
+            </View>
+        </View>
+
+    }
+
+    return <TouchableOpacity onPress={() => loadAnimals(curral)}>
+        <View style={styles.container}>
+            <View style={[styles.body, styles.shadow]}>
+                <MaterialCommunityIcons name="barn" style={styles.icon} />
+                <View style={styles.itemInfo}>
+                    <Text style={styles.name}>{curral.name}</Text>
+                    {/* <Text style={styles.name}>{curral.id}</Text> */}
+                    <View style={styles.menuHorizontal}>
+                        <Button style={{ marginRight: 10 }}
+                            icon={
+                                <Icon
+                                    name="edit"
+                                    size={15}
+                                    color="white"
+                                />
+                            }
+                            onPress={() => setEdit(true)}
+                        />
+                        <Button
+                            icon={
+                                <Icon
+                                    name="times"
+                                    size={15}
+                                    color="white"
+                                />
+                            }
+                            onPress={() => removeCurral(curral)}
+                        />
+                    </View>
                 </View>
             </View>
         </View>
@@ -81,12 +84,29 @@ export default function Curral({ curral, updateCurral, removeCurral, loadAnimals
 }
 
 const styles = StyleSheet.create({
-    item: {
+    container: {
         flex: 1,
-        padding: '1em',
+        padding: 16,
+        paddingTop: 6,
+        paddingBottom: 8
+    },
+    body: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        borderBottomWidth: 1
+        padding: 16,
+        backgroundColor: 'white',
+        borderRadius: 8
+    },
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
     },
     icon: {
         fontSize: 25,
@@ -102,21 +122,19 @@ const styles = StyleSheet.create({
         flex: 1
     },
     edit: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        borderBottomWidth: 1,
-        padding: 10
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     btn: {
         flex: 0.5,
-        marginRight: 10
     },
     menu: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     menuHorizontal: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+    },
+    input: {
+        fontSize: 20
     }
 })

@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { View, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, Button, Input } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '../../services/api';
-import { AppRegistry, SafeAreaView } from 'react-native-web';
+import { AppRegistry } from 'react-native-web';
 import Curral from '../Curral';
 import BotaoFlutuante from '../BotaoFlutuante'
+import { AuthContext } from '../../contexts/auth'
+import { Modalize } from 'react-native-modalize';
+import CurralModal from '../CurralModal';
+
 
 export default function Currais({ navigation, route }) {
     const [currais, setCurrais] = useState([])
-    const [name, setName] = useState('')
+    const { modalCurrais, token } = useContext(AuthContext)
+    
 
     useEffect(() => {
         loadCurrais()
@@ -21,7 +26,7 @@ export default function Currais({ navigation, route }) {
     const loadCurrais = () => {
         api.get('/corrals', {
             headers: {
-                Authorization: route.params.token
+                Authorization: token
             }
         }).then((res) => {
             setCurrais(res.data)
@@ -30,7 +35,7 @@ export default function Currais({ navigation, route }) {
         })
     }
 
-    const addCurral = () => {
+    const addCurral = (name) => {
         /* if (!name) {
             alert('Preencha o campo nome!')
             return
@@ -38,7 +43,7 @@ export default function Currais({ navigation, route }) {
 
         api.post('/corrals', { name }, {
             headers: {
-                Authorization: route.params.token
+                Authorization: token
             }
         }).then((res) => {
             // console.log(res.data)
@@ -60,7 +65,7 @@ export default function Currais({ navigation, route }) {
         console.log(`Deletei o curral ${curral.id}`)
         api.delete(`/corrals/${curral.id}`, {
             headers: {
-                Authorization: route.params.token
+                Authorization: token
             }
         }).then((res) => {
             console.log(res.data)
@@ -80,7 +85,7 @@ export default function Currais({ navigation, route }) {
         console.log(`Alterei o curral ${curral.id}`)
         api.put(`/corrals/${curral.id}`, { name: newName }, {
             headers: {
-                Authorization: route.params.token
+                Authorization: token
             }
         })
             .then((res) => res.data)
@@ -100,27 +105,10 @@ export default function Currais({ navigation, route }) {
     }
 
     const loadAnimals = (curral) => {
-        navigation.navigate("Animais", { token: route.params.token, curral_id: curral.id })
+        navigation.navigate("Animais", { curral_id: curral.id })
     }
 
     return <SafeAreaView style={styles.container}>
-        <Input
-            value={name}
-            placeholder="Nome do curral:"
-            leftIcon={{ type: 'font-awesome', name: 'list' }}
-            onChangeText={value => setName(value)}
-            keyboardType="email-address"
-        />
-        <Button
-            icon={
-                <Icon
-                    name="plus"
-                    size={15}
-                    color="white"
-                />
-            }
-            onPress={addCurral}
-        />
         <FlatList
             data={currais}
             renderItem={({ item }) => <Curral
@@ -132,7 +120,7 @@ export default function Currais({ navigation, route }) {
             keyExtractor={(item) => item.id}
         />
 
-        <BotaoFlutuante/>
+        <CurralModal addCurral={addCurral} refModal={modalCurrais}/>
 
     </SafeAreaView>
 
@@ -161,5 +149,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         flex: 1
+    },
+    title: {
+        fontWeight: 'bold',
+        padding: 10,
+        textTransform: 'capitalize',
+        fontSize: 18,
+        textAlign: 'center'
     }
 })

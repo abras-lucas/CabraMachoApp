@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Input, Text, buttonStyle } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from '../style/mainStyle';
 import api from '../services/api';
-
+import { AuthContext } from '../contexts/auth'
 
 
 export default function login({ navigation }) {
@@ -12,6 +12,14 @@ export default function login({ navigation }) {
   const [username, setUsername] = useState('admin')
   const [password, setPassword] = useState('12345')
   const [errorMsg, setErrorMsg] = useState(null)
+  const { setToken } = useContext(AuthContext)
+  
+  
+  useEffect(() => {
+    if (username && password){
+      logar()
+    }
+  },[])
 
   const logar = () => {
     setErrorMsg('')
@@ -26,7 +34,8 @@ export default function login({ navigation }) {
       password
     }).then((res) => {
       if (res.data.success) {
-        navigation.navigate("Principal", { token: res.data.token })
+        setToken(res.data.token)
+        navigation.navigate("Principal")
       } else {
         setErrorMsg('Informações incorretas!')
       }

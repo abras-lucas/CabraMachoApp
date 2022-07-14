@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { View, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements'
-import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '../services/api';
-import { AppRegistry, SafeAreaView } from 'react-native-web';
 import Animal from '../components/Animal';
+import { AuthContext } from '../contexts/auth'
+import AnimalModal from '../components/AnimalModal';
 
 export default function Animais({ navigation, route }) {
     const [animais, setAnimais] = useState([])
@@ -17,11 +14,22 @@ export default function Animais({ navigation, route }) {
     const [food, setFood] = useState('')
     const [birth, setBirth] = useState('')
 
-    const { token, curral_id } = route.params
+    const { token, modalAnimais, onOpenModalAnimais } = useContext(AuthContext)
+
+    const { curral_id } = route.params
 
     useEffect(() => {
         loadAnimais()
     }, [])
+
+    function onEditAnimal(animal) {
+        setId(animal.id)
+        setCode(animal.code)
+        setBreed(animal.breed)
+        setFood(animal.food)
+        setBirth(animal.birth)
+        modalAnimais.current?.open()
+    }
 
     const clearInputs = () => {
         setId('')
@@ -97,7 +105,7 @@ export default function Animais({ navigation, route }) {
         }
 
         clearInputs()
-        
+
     }
 
     const removeAnimal = (animal) => {
@@ -115,67 +123,75 @@ export default function Animais({ navigation, route }) {
         })
     }
 
-    const editAnimal = (animal) => {
-        setId(animal.id)
-        setCode(animal.code)
-        setBreed(animal.breed)
-        setFood(animal.food)
-        setBirth(animal.birth)
+    if (animais.length === 0) {
+        return <SafeAreaView style={styles.container}>
+            <View style={styles.empty}>
+                <Text style={styles.text}>
+                    Curral Vazio!
+                </Text>
+            </View>
+
+            <AnimalModal
+                refModal={modalAnimais}
+                addAnimal={addAnimal}
+                id={id}
+                setId={setId}
+                code={code}
+                setCode={setCode}
+                breed={breed}
+                setBreed={setBreed}
+                food={food}
+                setFood={setFood}
+                birth={birth}
+                setBirth={setBirth}
+            />
+
+        </SafeAreaView>
     }
 
-    return <SafeAreaView styles={{ flex: 1 }}>
-        <Input
-            value={code}
-            placeholder="Codigo do animal:"
-            leftIcon={{ type: 'font-awesome', name: 'list' }}
-            onChangeText={value => setCode(value)}
-            keyboardType="email-address"
-        />
-        <Input
-            value={breed}
-            placeholder="Raça do animal:"
-            leftIcon={{ type: 'font-awesome', name: 'list' }}
-            onChangeText={value => setBreed(value)}
-            keyboardType="email-address"
-        />
-        <Input
-            value={food}
-            placeholder="Ração do animal:"
-            leftIcon={{ type: 'font-awesome', name: 'list' }}
-            onChangeText={value => setFood(value)}
-            keyboardType="email-address"
-        />
-        <Input
-            value={birth}
-            placeholder="Data de nascimento do animal:"
-            leftIcon={{ type: 'font-awesome', name: 'list' }}
-            onChangeText={value => setBirth(value)}
-            keyboardType="email-address"
-        />
-        <Button
-            icon={
-                <Icon
-                    name="plus"
-                    size={15}
-                    color="white"
-                />
-            }
-            onPress={addAnimal}
-        />
+    return <SafeAreaView style={styles.container}>
         <FlatList
             data={animais}
             renderItem={({ item }) => <Animal
                 animal={item}
-                editAnimal={editAnimal}
+                editAnimal={() => { onEditAnimal(item) }}
                 removeAnimal={removeAnimal}
             />}
             keyExtractor={(item) => item.id}
         />
+
+        <AnimalModal
+            refModal={modalAnimais}
+            addAnimal={addAnimal}
+            id={id}
+            setId={setId}
+            code={code}
+            setCode={setCode}
+            breed={breed}
+            setBreed={setBreed}
+            food={food}
+            setFood={setFood}
+            birth={birth}
+            setBirth={setBirth}
+        />
+
     </SafeAreaView>
 
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    empty : {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },  
+    text: {
+        fontSize: 16,
+        color: '#191629'
+    },
     item: {
         padding: '1em',
         flexDirection: 'row',

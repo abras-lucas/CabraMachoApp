@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, StyleSheet, Button } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Text, Button } from 'react-native-elements'
+import { Text } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import animais from './animais';
 import api from '../services/api';
 import Scanner from '../components/Scanner';
 import Currais from '../components/Currais';
+import { AuthContext } from '../contexts/auth'
 
 export default function principal({ navigation, route }) {
 
   const Tab = createBottomTabNavigator();
+  const { onOpenModalCurrais } = useContext(AuthContext)
 
   return (
     <Tab.Navigator
@@ -24,18 +26,27 @@ export default function principal({ navigation, route }) {
       <Tab.Screen
         name="Currais"
         // component={Currais}
-        children={() => <Currais navigation={navigation} route={route} />}
+        children={() => <Currais navigation={navigation} />}
         options={{
           tabBarLabel: 'Início',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="barn" color={color} size={size} />
+          ),
+          headerRight: () => (
+            <View style={{ marginRight: 10 }} >
+              <Button
+                onPress={onOpenModalCurrais}
+                title="Adicionar"
+                color="#000"
+              />
+            </View>
           ),
         }}
       />
       <Tab.Screen
         name="Scanner"
         // component={Scanner}
-        children={() => <Scanner navigation={navigation} route={route} />}
+        children={() => <Scanner navigation={navigation} />}
         options={{
           tabBarLabel: 'Scanner',
           tabBarIcon: ({ color, size }) => (
