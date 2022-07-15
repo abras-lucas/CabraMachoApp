@@ -13,11 +13,19 @@ import { AuthContext } from '../../contexts/auth'
 import { Modalize } from 'react-native-modalize';
 import CurralModal from '../CurralModal';
 
+function Empty({mensagem}) {
+    return <View style={styles.empty}>
+        <Text style={styles.text}>
+           {mensagem}
+        </Text>
+    </View>
+}
+
 
 export default function Currais({ navigation, route }) {
     const [currais, setCurrais] = useState([])
     const { modalCurrais, token } = useContext(AuthContext)
-    
+
 
     useEffect(() => {
         loadCurrais()
@@ -109,27 +117,31 @@ export default function Currais({ navigation, route }) {
     }
 
     return <SafeAreaView style={styles.container}>
-        <FlatList
-            data={currais}
-            renderItem={({ item }) => <Curral
-                curral={item}
-                updateCurral={updateCurral}
-                removeCurral={removeCurral}
-                loadAnimals={loadAnimals}
-            />}
-            keyExtractor={(item) => item.id}
-        />
+        <View style={styles.container}>
+            {currais.length === 0 ? <Empty mensagem={'Curral Vazio!'}/> :
+                <FlatList
+                    data={currais}
+                    renderItem={({ item }) => <Curral
+                        curral={item}
+                        updateCurral={updateCurral}
+                        removeCurral={removeCurral}
+                        loadAnimals={loadAnimals}
+                    />}
+                    keyExtractor={(item) => item.id}
+                />
+            }
 
-        <CurralModal addCurral={addCurral} refModal={modalCurrais}/>
-
+            <CurralModal addCurral={addCurral} refModal={modalCurrais} />
+        </View>
     </SafeAreaView>
+
 
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        position: 'relative'
+        paddingVertical: 5
     },
     item: {
         padding: '1em',
@@ -156,5 +168,14 @@ const styles = StyleSheet.create({
         textTransform: 'capitalize',
         fontSize: 18,
         textAlign: 'center'
+    },
+    empty: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    text: {
+        fontSize: 16,
+        color: '#191629'
     }
 })

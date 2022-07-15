@@ -8,6 +8,7 @@ export default function Curral({ curral, updateCurral, removeCurral, loadAnimals
     const [edit, setEdit] = useState(false)
     const [name, setName] = useState(curral.name)
 
+    // Modo de edição
     if (edit) {
         return <View style={styles.container}>
             <View style={[styles.body, styles.shadow, styles.edit]}>
@@ -32,6 +33,7 @@ export default function Curral({ curral, updateCurral, removeCurral, loadAnimals
                             }
                         }
                     />
+                    <View style={{width: 5}}/>
                     <Button style={styles.btn}
                         icon={
                             <Icon
@@ -51,12 +53,12 @@ export default function Curral({ curral, updateCurral, removeCurral, loadAnimals
     return <TouchableOpacity onPress={() => loadAnimals(curral)}>
         <View style={styles.container}>
             <View style={[styles.body, styles.shadow]}>
-                <MaterialCommunityIcons name="barn" style={styles.icon} />
+                {/* <MaterialCommunityIcons name="barn" style={styles.icon} /> */}
                 <View style={styles.itemInfo}>
                     <Text style={styles.name}>{curral.name}</Text>
                     {/* <Text style={styles.name}>{curral.id}</Text> */}
                     <View style={styles.menuHorizontal}>
-                        <Button style={{ marginRight: 10 }}
+                        <Button
                             icon={
                                 <Icon
                                     name="edit"
@@ -66,6 +68,7 @@ export default function Curral({ curral, updateCurral, removeCurral, loadAnimals
                             }
                             onPress={() => setEdit(true)}
                         />
+                        <View style={{width: 5}}/>
                         <Button
                             icon={
                                 <Icon

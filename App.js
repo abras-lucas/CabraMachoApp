@@ -9,6 +9,7 @@ import login from './screens/login';
 import principal from './screens/principal';
 import cadastro from './screens/cadastro';
 import Animais from './screens/animais';
+import Animal from './screens/Animal';
 import AuthProvider from './contexts/auth';
 import { AuthContext } from './contexts/auth'
 
@@ -34,6 +35,7 @@ function MyStack() {
           </View>
         ),
       }} />
+      <Stack.Screen name="Detalhes do Animal" component={Animal} />
     </Stack.Navigator>
   );
 }

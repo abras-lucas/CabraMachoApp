@@ -2,9 +2,17 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { View, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements'
 import api from '../services/api';
-import Animal from '../components/Animal';
+import AnimalItem from '../components/AnimalItem';
 import { AuthContext } from '../contexts/auth'
 import AnimalModal from '../components/AnimalModal';
+
+function Empty({ mensagem }) {
+    return <View style={styles.empty}>
+        <Text style={styles.text}>
+            {mensagem}
+        </Text>
+    </View>
+}
 
 export default function Animais({ navigation, route }) {
     const [animais, setAnimais] = useState([])
@@ -123,13 +131,20 @@ export default function Animais({ navigation, route }) {
         })
     }
 
-    if (animais.length === 0) {
-        return <SafeAreaView style={styles.container}>
-            <View style={styles.empty}>
-                <Text style={styles.text}>
-                    Curral Vazio!
-                </Text>
-            </View>
+    return <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
+            {animais.length === 0 ? <Empty mensagem={'Sem Animais'} /> :
+                <FlatList
+                    data={animais}
+                    renderItem={({ item }) => <AnimalItem
+                        animal={item}
+                        editAnimal={() => { onEditAnimal(item) }}
+                        removeAnimal={removeAnimal}
+                        onPress={() => { navigation.navigate("Detalhes do Animal", { animal: item, curral_id }) }}
+                    />}
+                    keyExtractor={(item) => item.id}
+                />
+            }
 
             <AnimalModal
                 refModal={modalAnimais}
@@ -145,35 +160,7 @@ export default function Animais({ navigation, route }) {
                 birth={birth}
                 setBirth={setBirth}
             />
-
-        </SafeAreaView>
-    }
-
-    return <SafeAreaView style={styles.container}>
-        <FlatList
-            data={animais}
-            renderItem={({ item }) => <Animal
-                animal={item}
-                editAnimal={() => { onEditAnimal(item) }}
-                removeAnimal={removeAnimal}
-            />}
-            keyExtractor={(item) => item.id}
-        />
-
-        <AnimalModal
-            refModal={modalAnimais}
-            addAnimal={addAnimal}
-            id={id}
-            setId={setId}
-            code={code}
-            setCode={setCode}
-            breed={breed}
-            setBreed={setBreed}
-            food={food}
-            setFood={setFood}
-            birth={birth}
-            setBirth={setBirth}
-        />
+        </View>
 
     </SafeAreaView>
 
@@ -181,13 +168,14 @@ export default function Animais({ navigation, route }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        paddingVertical: 5
     },
-    empty : {
+    empty: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
-    },  
+    },
     text: {
         fontSize: 16,
         color: '#191629'

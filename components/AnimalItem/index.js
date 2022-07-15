@@ -5,58 +5,20 @@ import { Text, Button, Input } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-web';
 
-export default function Animal({ animal, editAnimal, removeAnimal }) {
-    // const [edit, setEdit] = useState(false)
-    // const [name, setName] = useState(curral.name)
+export default function AnimalItem({ animal, editAnimal, removeAnimal, onPress }) {
 
-    /* if (edit) {
-        return <View style={styles.edit}>
-            <Input style={styles.input}
-                value={name}
-                placeholder="Nome do Curral:"
-                onChangeText={value => setName(value)}
-            />
-            <View style={styles.menu}>
-                <Button style={styles.btn}
-                    icon={
-                        <Icon
-                            name="save"
-                            size={15}
-                            color="white"
-                        />
-                    }
-                    onPress={
-                        () => {
-                            updateAnimal(curral, name)
-                            setEdit(false)
-                        }
-                    }
-                />
-                <Button style={styles.btn}
-                    icon={
-                        <Icon
-                            name="times"
-                            size={15}
-                            color="white"
-                        />
-                    }
-                    onPress={() => setEdit(false)}
-                />
-            </View>
-        </View>
-
-    } */
-
-    return <View style={styles.container}>
-        <View style={[styles.body, styles.shadow]}>
-            <MaterialCommunityIcons name="donkey" style={styles.icon} />
-            <View style={styles.itemInfo}>
-                <Text style={styles.name}>{animal.code}</Text>
-                <Text style={styles.name}>{animal.breed}</Text>
-                <Text style={styles.name}>{animal.food}</Text>
-                <Text style={styles.name}>{animal.birth}</Text>
+    return <TouchableOpacity onPress={onPress}>
+        <View style={styles.container}>
+            <View style={[styles.body, styles.shadow]}>
+                {/* <MaterialCommunityIcons name="donkey" style={styles.icon} /> */}
+                <View style={styles.itemInfo}>
+                    <Text style={styles.name}>{animal.code} - </Text>
+                    <Text style={styles.name}>{animal.breed}</Text>
+                    {/* <Text style={styles.name}>{animal.food}</Text>
+                    <Text style={styles.name}>{animal.birth}</Text> */}
+                </View>
                 <View style={styles.menuHorizontal}>
-                    <Button style={{ marginRight: 10 }}
+                    <Button
                         icon={
                             <Icon
                                 name="edit"
@@ -66,6 +28,7 @@ export default function Animal({ animal, editAnimal, removeAnimal }) {
                         }
                         onPress={() => editAnimal(animal)}
                     />
+                    <View style={{ width: 5 }} />
                     <Button
                         icon={
                             <Icon
@@ -79,7 +42,8 @@ export default function Animal({ animal, editAnimal, removeAnimal }) {
                 </View>
             </View>
         </View>
-    </View>
+
+    </TouchableOpacity>
 }
 
 const styles = StyleSheet.create({
@@ -124,7 +88,6 @@ const styles = StyleSheet.create({
     itemInfo: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
         flex: 1
     },
     edit: {
@@ -143,6 +106,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     menuHorizontal: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     }
 })
