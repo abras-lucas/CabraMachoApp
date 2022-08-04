@@ -8,8 +8,8 @@ import { AuthContext } from '../../contexts/auth'
 import api from '../../services/api';
 
 function Vaccine({ vaccine }) {
-    return <View>
-        <Text>{vaccine}</Text>
+    return <View style={[styles.body, styles.shadow, styles.infoValue]}>
+        <Text style={styles.infoValue}>{vaccine.name}</Text>
     </View>
 }
 
@@ -26,23 +26,15 @@ export default function Animal({ navigation, route }) {
     }, [])
 
     const loadVaccines = () => {
-        api.get(`/corrals/${curral_id}/animals/${animal.id}`, {
+        console.log(`/animals/${animal.id}/vaccines/`)
+        api.get(`/animals/${animal.id}/vaccines/`, {
             headers: {
                 Authorization: token
             }
         }).then((res) => {
-            const data = res.data
-            const vaccines = data.vaccines
-            console.log(data)
-            console.log(typeof vaccines, vaccines)
-            console.log(Object.keys(vaccines))
-            const vaccines_ = new Array()
-            console.log(typeof vaccines_, vaccines_)
-            Object.keys(vaccines).forEach((key) => vaccines_.push (vaccines[key]))
-            console.log(typeof vaccines_, vaccines_)
-            setVaccines(vaccines_)
-            // console.log(typeof res.data.vaccines)
-            // console.log(res.data.vaccines)
+            console.log(res.data)
+            console.log(typeof res.data)
+            setVaccines(res.data)
         }).catch((err) => {
             console.log(err)
         })
@@ -54,7 +46,6 @@ export default function Animal({ navigation, route }) {
                 Authorization: token
             }
         }).then((res) => {
-            
             console.log(res.data)
         }).catch((err) => {
             console.log(err)
