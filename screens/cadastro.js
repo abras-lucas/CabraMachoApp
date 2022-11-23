@@ -4,7 +4,7 @@ import { Button, Input, Text, buttonStyle, CheckBox } from 'react-native-element
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from '../style/mainStyle';
 
-export default function cadastro({navigation}) {
+export default function Cadastro({navigation}) {
 
   const [email, setEmail] = useState(null)
   const [nome, setNome] = useState(null)

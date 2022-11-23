@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, Button, Input } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { TouchableOpacity } from 'react-native-web';
+import { TouchableOpacity } from 'react-native';
 
 export default function AnimalItem({ animal, editAnimal, removeAnimal, onPress }) {
 

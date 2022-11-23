@@ -7,7 +7,7 @@ import api from '../services/api';
 import { AuthContext } from '../contexts/auth'
 
 
-export default function login({ navigation }) {
+export default function Login({ navigation }) {
 
   const [username, setUsername] = useState('admin')
   const [password, setPassword] = useState('12345')

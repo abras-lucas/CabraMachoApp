@@ -23,6 +23,7 @@ export default function Animal({ navigation, route }) {
 
     useEffect(() => {
         loadVaccines()
+        console.log(animal)
     }, [])
 
     const loadVaccines = () => {
@@ -46,13 +47,15 @@ export default function Animal({ navigation, route }) {
                 Authorization: token
             }
         }).then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
+            const vaccine = {name,id:res.data.id}
+            setVaccines(prev => [...prev,vaccine])
         }).catch((err) => {
             console.log(err)
         })
     }
 
-    return <View style={{ padding: 10 }}>
+    return <View style={{ padding: 10, flex: 1 }}>
         <View style={[styles.body, styles.shadow]}>
             <View>
                 <Info title={'Código'} value={animal.code} />
@@ -82,7 +85,7 @@ export default function Animal({ navigation, route }) {
                     />
                 </View>
             </View>
-            <FlatList
+            <FlatList style = {{minHeight: 200}}
                 data={vaccines}
                 renderItem={({ item }) => <Vaccine
                     vaccine={item}

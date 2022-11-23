@@ -5,10 +5,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './style/mainStyle';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import login from './screens/login';
-import principal from './screens/principal';
-import cadastro from './screens/cadastro';
-import Animais from './screens/animais';
+import Login from './screens/Login';
+import Principal from './screens/Principal';
+import Cadastro from './screens/Cadastro';
+import Animais from './screens/Animais';
 import Animal from './screens/Animal';
 import AuthProvider from './contexts/auth';
 import { AuthContext } from './contexts/auth'
@@ -21,9 +21,9 @@ function MyStack() {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={login} />
-      <Stack.Screen name="Principal" component={principal} /*options={{headerShown:false}}*/ />
-      <Stack.Screen name="Cadastro" component={cadastro} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Principal" component={Principal} /*options={{headerShown:false}}*/ />
+      <Stack.Screen name="Cadastro" component={Cadastro} />
       <Stack.Screen name="Animais" component={Animais} options={{
         headerRight: () => (
           <View style={{ marginRight: 10 }} >

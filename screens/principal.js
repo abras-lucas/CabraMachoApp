@@ -5,13 +5,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import animais from './animais';
+import animais from './Animais';
 import api from '../services/api';
 import Scanner from '../components/Scanner';
 import Currais from '../components/Currais';
 import { AuthContext } from '../contexts/auth'
 
-export default function principal({ navigation, route }) {
+export default function Principal({ navigation, route }) {
 
   const Tab = createBottomTabNavigator();
   const { onOpenModalCurrais } = useContext(AuthContext)
